@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoginViewController: UIViewController {
+class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var username: UITextField?
     @IBOutlet weak var password: UITextField?
@@ -34,6 +34,12 @@ class LoginViewController: UIViewController {
     // MARK :- Create View entry this function
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Initial Listener for Observer event
+        self.password?.delegate = self
+        self.username?.delegate = self
+        self.username?.tag = 0
+        self.password?.tag = 1
     }
     
     // MARK :- Alert Dialog
@@ -74,6 +80,18 @@ class LoginViewController: UIViewController {
                 navigator.pushViewController(viewController, animated: true)
             }
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if let nextField = textField.superview?.viewWithTag(textField.tag + 1) as? UITextField {
+            nextField.becomeFirstResponder()
+        } else {
+            textField.resignFirstResponder()
+            self.onClickLogin()
+            return true;
+        }
+        
+        return false
     }
 
 }
